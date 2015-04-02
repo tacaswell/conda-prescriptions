@@ -1,0 +1,24 @@
+package:
+    name: synapps
+    version: "5.7"
+
+source:
+    fn: synApps_5_7.tar.gz
+    url: http://www.aps.anl.gov/bcda/synApps/tar/synApps_5_7.tar.gz
+
+build:
+  number: 4
+
+requirements:
+  build:
+    - epics-base
+    - epics-msi
+
+  run:
+    - epics-base
+    - epics-msi
+
+about:
+    home: http://www.aps.anl.gov/bcda/synApps/
+    license: Epics Open License
+    summary: synApps is a collection of software tools that help to create a control system for beamlines.

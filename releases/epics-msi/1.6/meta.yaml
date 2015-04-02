@@ -1,0 +1,21 @@
+package:
+    name: epics-msi
+    version: "1.6"
+
+source:
+    fn: msi1-6.tar.gz
+    url: http://www.aps.anl.gov/epics/download/extensions/msi1-6.tar.gz
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - epics-base
+
+  run:
+    - epics-base
+
+about:
+    home: http://www.aps.anl.gov/epics/extensions/msi/
+    license: Epics Open License

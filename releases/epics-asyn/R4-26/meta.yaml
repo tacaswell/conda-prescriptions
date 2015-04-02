@@ -1,0 +1,23 @@
+
+package:
+    name: epics-asyn
+    version: "4.26"
+
+source:
+    fn: asyn4-26.tar.gz
+    url: http://www.aps.anl.gov/epics/download/modules/asyn4-26.tar.gz
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - epics-base
+
+  run:
+    - epics-base
+
+about:
+    home: http://www.aps.anl.gov/epics/modules/soft/asyn/
+    license: Epics Open License
+    summary: EPICS Base Library
