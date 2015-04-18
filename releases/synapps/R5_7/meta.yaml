@@ -7,7 +7,7 @@ source:
     url: http://www.aps.anl.gov/bcda/synApps/tar/synApps_5_7.tar.gz
 
 build:
-  number: 4
+  number: 5
 
 requirements:
   build:

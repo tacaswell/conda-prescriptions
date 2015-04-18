@@ -2,12 +2,25 @@
 
 export EPICS_BASE=$PREFIX/lib/epics
 export EPICS_HOST_ARCH=linux-x86_64
-PTH="as  bin  configure  db  dbd  extensions  include  iocBoot  lib  op  startup  templates"
+
+cd support
+SYNAPPS=$(find ./ -maxdepth 1 -type d | sed -rn 's|./([[:alpha:][:digit:]]*-[0-9][-[:digit:]]*)|\1|p')
+
+PTH="as configure  db  dbd  extensions  include  iocBoot  lib  op  startup  templates"
 for pth in $PTH; do
     install -d $EPICS_BASE/$pth
+    ln -s $EPICS_BASE/$pth $pth
+    for dir in $SYNAPPS; do
+        ln -s $EPICS_BASE/$pth $dir/$pth
+    done
 done
 
-find ./ -name RELEASE | xargs sed -i 's|/APSshare/epics/base-3.14.12.3|/'$EPICS_BASE'|g'
+for dir in $SYNAPPS; do
+    install -d $dir/$EPICS_HOST_ARCH
+    ln -s $EPICS_BASE/$pth $dir/$EPICS_HOST_ARCH/$pth
+done
+
+find ./ -name RELEASE |
 find ./ -name RELEASE | xargs sed -i 's|/APSshare/epics/synApps_5_7/support|'$SRC_DIR'/support|g'
 find ./  -wholename '*/configure/CONFIG*' -type f | xargs sed -i 's|INSTALL_LOCATION[ =]*$(TOP)|INSTALL_LOCATION = '$EPICS_BASE'|g'
 find ./  -wholename '*/configure/CONFIG*' -type f | xargs sed -i 's|#INSTALL_LOCATION[ =]*<.*>|INSTALL_LOCATION = '$EPICS_BASE'|g'
@@ -17,10 +30,4 @@ find ./  -wholename '*/configure/CONFIG*' -type f | xargs sed -i 's|#INSTALL_LOC
 #find ./  -wholename '*/configure/*' -type f | xargs sed -i 's|INSTALL_LOCATION = <.*>|INSTALL_LOCATION = '$EPICS_BASE'|g'
 
 
-cd support
-SYNAPPS=$(find ./ -maxdepth 1 -type d | sed -rn 's|./([[:alpha:][:digit:]]*-[0-9][-[:digit:]]*)|\1|p')
-for pth in $SYNAPPS; do
-    touch $pth/RELEASE_SITE
-done
-
-make -j$(getconf _NPROCESSORS_ONLN)
+make #-j$(getconf _NPROCESSORS_ONLN)
