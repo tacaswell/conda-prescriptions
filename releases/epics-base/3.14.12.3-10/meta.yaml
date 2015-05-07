@@ -1,0 +1,27 @@
+package:
+  name: epics-base
+  version: '3.14.12.3_10'
+
+source:
+  git_url: https://github.com/epicsdeb/epics-base.git
+  git_rev: 'debian/3.14.12.3-10'
+  patches:
+    - config_site.diff
+    - config_common.diff
+
+
+build:
+  number: 2
+  detect_binary_files_with_prefix: 1
+
+requirements:
+  build:
+    - readline
+
+  run:
+    - readline
+
+about:
+    home: http://www.aps.anl.gov/epics
+    license: Epics Open License
+    summary: EPICS Base Library
