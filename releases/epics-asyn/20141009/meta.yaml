@@ -8,7 +8,7 @@ source:
   git_rev: master
 
 build:
-  number: 8
+  number: 9
   detect_binary_files_with_prefix: 1
 
 requirements:
