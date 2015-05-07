@@ -7,9 +7,9 @@ NPROC=$(getconf _NPROCESSORS_ONLN)
 
 # apply debian patches
 
-for f in debian/patches/*patch;do
-    patch -p 1 < $f;
-done ;
+while read f;do
+    patch -p 1 < debian/patches/$f;
+done < debian/patches/series
 
 # set epics base
 sed -i 's|EPICS_BASE = /usr/lib/epics|EPICS_BASE = '$EPICS_BASE'|g' debian/rules2
@@ -28,7 +28,7 @@ make -f debian/rules2 binfo
 make -f debian/rules2 all
 
 # we need to do this _after_ building it once so that
-# set install path
+# setting the install path does not break everything
 sed -i  's|#INSTALL_LOCATION=|INSTALL_LOCATION='$PREFIX'/epics|g' debian/rules2
 
 make -f debian/rules2 binfo
@@ -41,11 +41,9 @@ echo '## link bin'
 cd $PREFIX/bin
 for fn in $PREFIX/epics/bin/$EPICS_HOST_ARCH/* ; do
     bn=`basename $fn`
-    echo $fn, $bn
     if [ ! -e $PREFIX/bin/$bn ]
        then
 	   ln -s ../epics/bin/$EPICS_HOST_ARCH/$bn .
-	   echo 'linking ' $fn $bn
     fi
 done
 
@@ -53,10 +51,8 @@ cd $PREFIX/lib
 echo '## link lib'
 for fn in $PREFIX/epics/lib/$EPICS_HOST_ARCH/*.so* ; do
     bn=`basename $fn`
-    echo $fn, $bn
     if [ ! -e $EPICS_BASE/$bn ]
        then
 	   ln -s ../epics/lib/$EPICS_HOST_ARCH/$bn .
-	   echo 'linking ' $fn $bn
     fi
 done
