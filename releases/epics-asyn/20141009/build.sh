@@ -3,7 +3,7 @@
 export EPICS_BASE=$PREFIX/lib/epics
 export EPICS_HOST_ARCH=linux-x86_64
 
-make -j$(getconf _NPROCESSORS_ONLN)
+NPROC=$(getconf _NPROCESSORS_ONLN)
 
 # apply debian patches
 
@@ -24,8 +24,8 @@ sed -i 's_	--matches _#_' seq/Makefile
 
 make -f debian/rules2 binfo
 
-# # run the debian build
-make -f debian/rules2 all -j 8
+# run the debian build
+make -f debian/rules2 all
 
 # we need to do this _after_ building it once so that
 # set install path
@@ -36,15 +36,27 @@ make -f debian/rules2 binfo
 # run the debian build
 make -f debian/rules2 install
 
-for fn in $PREFX/epics/bin/$EPICS_HOST_ARCH/* ; do
-    if [[ ! -e $PREFIX/bin/$fn ]]:
-       ln -s $PREFX/epics/bin/$EPICS_HOST_ARCH/$fn $PREFIX/bin/
+
+echo '## link bin'
+cd $PREFIX/bin
+for fn in $PREFIX/epics/bin/$EPICS_HOST_ARCH/* ; do
+    bn=`basename $fn`
+    echo $fn, $bn
+    if [ ! -e $PREFIX/bin/$bn ]
+       then
+	   ln -s ../epics/bin/$EPICS_HOST_ARCH/$bn .
+	   echo 'linking ' $fn $bn
     fi
 done
 
-
-for fn in $PREFX/epics/lib/$EPICS_HOST_ARCH/* ; do
-    if [[ ! -e $PREFIX/lib/$fn ]]:
-       ln -s $PREFX/epics/lib/$EPICS_HOST_ARCH/$fn $PREFIX/lib/
+cd $PREFIX/lib
+echo '## link lib'
+for fn in $PREFIX/epics/lib/$EPICS_HOST_ARCH/*.so* ; do
+    bn=`basename $fn`
+    echo $fn, $bn
+    if [ ! -e $EPICS_BASE/$bn ]
+       then
+	   ln -s ../epics/lib/$EPICS_HOST_ARCH/$bn .
+	   echo 'linking ' $fn $bn
     fi
 done
