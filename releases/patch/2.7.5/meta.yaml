@@ -1,0 +1,13 @@
+package:
+    name: patch
+    version: "2.7.5"
+
+source:
+    fn: patch-2.7.5.tar.bz2
+    url: ftp://ftp.gnu.org/gnu/patch/patch-2.7.5.tar.gz
+
+build:
+    number: 0
+
+about:
+    home: http://savannah.gnu.org/projects/patch/
