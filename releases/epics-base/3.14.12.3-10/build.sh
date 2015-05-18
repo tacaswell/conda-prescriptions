@@ -1,9 +1,9 @@
 #!/bin/bash
 install -d $PREFIX/bin
 install -d $PREFIX/lib
-install -d $PREFIX/lib/epics
+install -d $PREFIX/epics
 
-export EPICS_BASE=$PREFIX/lib/epics
+export EPICS_BASE=$PREFIX/epics
 export EPICS_HOST_ARCH=$(startup/EpicsHostArch)
 
 NPROC=$(getconf _NPROCESSORS_ONLN)
