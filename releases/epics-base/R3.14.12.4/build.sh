@@ -1,21 +1,21 @@
 #!/bin/bash
 install -d $PREFIX/bin
 install -d $PREFIX/lib
-install -d $PREFIX/lib/epics
+install -d $PREFIX/epics
 
 make -j$(getconf _NPROCESSORS_ONLN)
 
-EPICS_BASE=$PREFIX/lib/epics
+EPICS_BASE=$PREFIX/epics
 EPICS_HOST_ARCH=$(startup/EpicsHostArch)
 
 # Copy libraries into $PREFIX/lib
-cp -av $PREFIX/lib/epics/lib/$EPICS_HOST_ARCH/lib* $PREFIX/lib
+cp -av $PREFIX/epics/lib/$EPICS_HOST_ARCH/lib*so* $PREFIX/lib
 
 # Setup symlinks for utilities
 BINS="caget caput camonitor softIoc"
 cd $PREFIX/bin
 for file in $BINS ; do
-	ln -s ../lib/epics/bin/$EPICS_HOST_ARCH/$file .
+	ln -s ../epics/bin/$EPICS_HOST_ARCH/$file .
 done
 
 # deal with env export
